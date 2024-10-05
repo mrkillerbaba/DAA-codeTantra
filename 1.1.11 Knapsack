@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int knapsack(int n, int c, int profit[], int weight[]) {
+    int dp[n + 1][c + 1];
+
+    // Initialize the dp array
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= c; j++) {
+            if (i == 0 || j == 0)
+                dp[i][j] = 0;  // No items or no capacity
+            else if (weight[i - 1] <= j)
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i - 1]] + profit[i - 1]);
+            else
+                dp[i][j] = dp[i - 1][j];  // Item cannot be included
+        }
+    }
+
+    return dp[n][c];  // Maximum profit for n items and capacity c
+}
+
+int main() {
+
+    int n, c;
+
+    // Input number of items
+    scanf("%d", &n);
+    
+    // Input capacity of the bag
+    scanf("%d", &c);
+    
+    int profit[n], weight[n];
+
+    // Input profit array
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &profit[i]);
+    }
+
+    // Input weight array
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &weight[i]);
+    }
+
+    // Calculate maximum profit
+    int maxProfit = knapsack(n, c, profit, weight);
+    
+    // Output the maximum profit
+    printf("%d\n", maxProfit);
+
+    return 0;
+}
